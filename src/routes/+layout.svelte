@@ -1,17 +1,14 @@
 <script>
-	import Header from './Header.svelte';
 	import './styles.css';
 </script>
 
 <div class="app">
-	<Header />
-
 	<main>
 		<slot />
 	</main>
 
 	<footer>
-		<p>visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to learn SvelteKit</p>
+		Vladislav Didenko 2024
 	</footer>
 </div>
 
@@ -19,14 +16,13 @@
 	.app {
 		display: flex;
 		flex-direction: column;
-		min-height: 100vh;
+		height: 90vh;
 	}
 
 	main {
 		flex: 1;
 		display: flex;
 		flex-direction: column;
-		padding: 1rem;
 		width: 100%;
 		max-width: 64rem;
 		margin: 0 auto;
@@ -41,11 +37,10 @@
 		padding: 12px;
 	}
 
-	footer a {
-		font-weight: bold;
-	}
-
-	@media (min-width: 480px) {
+	@media (min-width: 680px) {
+		.app {
+			height: 100vh;
+		}
 		footer {
 			padding: 12px 0;
 		}
