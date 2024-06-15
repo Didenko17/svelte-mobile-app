@@ -1,6 +1,15 @@
 <script lang="ts">
+  import * as imagePickerPlugin from '@nativescript/imagepicker';
+	import type { ImagePicker } from '@nativescript/imagepicker';
+
   import { initialMessages } from '../../../src/lib/constants'
   import { Message, Image } from '../../../src/lib/types';
+
+  const imagePickerObj: ImagePicker = imagePickerPlugin.create({
+    mode: 'multiple',
+    mediaType: 1,
+  });
+
 
   let messages: Message[] = initialMessages;
 
@@ -44,8 +53,22 @@
     });
   };
   
-  const onAttachImages = (event: CustomEvent<Image[]>) => {
-    images = [...images, ...event.detail];
+  const onAttachImages = () => {
+    imagePickerObj
+    .authorize()
+    .then((authResult) => {
+      if (authResult.authorized) {
+          return imagePickerObj.present().then((selection) => {
+            const newImages = selection.map((image) => (
+              {
+                alt: image.filename,
+                src: image.path,
+              }
+            ))
+            images = [...images, ...newImages]
+          })
+        }
+      })
   }
   
   </script>
@@ -53,24 +76,36 @@
   <page>
     <actionBar class="action-bar" title="Messenger" />
     <stackLayout>
-      <stackLayout class="message-box">
-          {#each messages as message}
-              <label class="message" class:mine={message.isMine} text={message.text} textWrap={true} />
-          {/each}
-      </stackLayout>
-      <stackLayout orientation="horizontal">
-        <textField bind:text={inputValue} class="message-input" hint="Введите текст" />
-        <button on:tap={() => alert('tapped')} class="icon-button">
-          <formattedString>
-            <span class="fas" text="&#xf0c6;" />
-          </formattedString>
-        </button>
-        <button on:tap={onSendMessage} class="icon-button">
-          <formattedString>
-            <span class="fas" text="&#xf1d8;" />
-          </formattedString>
-        </button>
-      </stackLayout>
+      <flexboxLayout class="flex-conteiner" flexDirection="column">
+        <stackLayout class="message-box">
+          <scrollView>
+            <stackLayout>
+              {#each messages as message}
+                <stackLayout class="message" class:mine={message.isMine}>
+                  {#each message.images || [] as image}
+                    <image class="message-image" src={image.src} />
+                  {/each}
+                  <label class="message-text" text={message.text} textWrap={true} />
+                </stackLayout>
+              {/each}
+            </stackLayout>
+          </scrollView>
+        </stackLayout>
+        <!-- <stackLayout flexShrink={0} width="100" height="100" backgroundColor="green"></stackLayout> -->
+        <stackLayout class="message-creator" orientation="horizontal">
+          <textField bind:text={inputValue} class="message-input" hint="Введите текст" />
+          <button on:tap={onAttachImages} class="icon-button">
+            <formattedString>
+              <span class="fas" text="&#xf0c6;" />
+            </formattedString>
+          </button>
+          <button on:tap={onSendMessage} class="icon-button">
+            <formattedString>
+              <span class="fas" text="&#xf1d8;" />
+            </formattedString>
+          </button>
+        </stackLayout>
+      </flexboxLayout>
     </stackLayout>
   </page>
   
@@ -79,23 +114,38 @@
   .action-bar {
     horizontal-align: center;
   }
+  .flex-conteiner {
+    height: 100%;
+  }
   .message-box {
     margin: 20;
     padding: 5;
-    height: 80%;
+    flex-grow: 1;
     border-color: #89f1ef;
     border-width: 1px;
   }
   .message {
-    overflow-wrap: break-word;
-    width: 250;
+    min-width: 40;
+    max-width: 200;
     min-height: 30;
     max-height: 80;
-    padding: 12 8;
-    background-color: #d2eeed;
+    padding: 6 12;
+    background-color: #b8f0ee;
     border-radius: 15px 15px 15px 0;
     margin: 5 0;
     horizontal-alignment: left;
+  }
+  .message-text {
+    overflow-wrap: break-word;
+    min-width: 40;
+    max-width: 250;
+    min-height: 30;
+    max-height: 80;
+    horizontal-alignment: left;
+  }
+  .message-image {
+    width: 100%;
+    margin-bottom: 5;
   }
   .mine {
     background-color: #e6f8f5;
@@ -111,16 +161,22 @@
     border-radius: 15px;
     padding: 8px 16px;
     line-height: 24px;
+    margin-right: 6;
+  }
+
+  .message-creator {
+    margin-bottom: 25;
   }
   .icon-button {
-    width: 30;
-    height: 30;
+    width: 36;
+    height: 36;
     border-radius: 50%;
     border-width: 2px;
     border-color: #89f1ef;
     color: #89f1ef;
     vertical-align: center;
     horizontal-align: center;
+    margin: 0 3;
   }
 </style>
   

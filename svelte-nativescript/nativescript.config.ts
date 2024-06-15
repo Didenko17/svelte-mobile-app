@@ -1,7 +1,7 @@
 import { NativeScriptConfig } from '@nativescript/core';
 
 export default {
-  id: 'org.nativescript.nativescriptapp.ios',
+  id: 'org.nativescript.sveltenativescript',
   appPath: 'app',
   appResourcesPath: 'App_Resources',
   android: {

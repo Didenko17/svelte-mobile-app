@@ -1,5 +1,5 @@
 {
-  "name": "nativescript-app",
+  "name": "svelte-nativescript",
   "main": "app/app.ts",
   "version": "1.0.0",
   "private": true,
@@ -10,10 +10,9 @@
     "svelte-native": "~1.0.9"
   },
   "devDependencies": {
-    "@nativescript/android": "8.7.0",
     "@nativescript/ios": "8.7.2",
     "@nativescript/types": "~8.7.0",
-    "@nativescript/webpack": "~5.0.19",
+    "@nativescript/webpack": "~5.0.21",
     "svelte": "~4.2.2",
     "svelte-loader": "^3.1.9",
     "svelte-native-preprocessor": "^1.0.0",

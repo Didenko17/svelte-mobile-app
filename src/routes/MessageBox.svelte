@@ -65,16 +65,16 @@
   </div>
   <div class="message-creator">
     <div class="attached-images">
-    {#each images as image, index}
-      <div class="attached-image">
-        <img src={image.src} alt={image.alt} />
-        <div class="detach-icon">
-          <IconButton on:click={() => detachImage(index)}>
-            <CloseIcon color="#89f1ef"/>
-          </IconButton>
+      {#each images as image, index}
+        <div class="attached-image">
+          <img src={image.src} alt={image.alt} />
+          <div class="detach-icon">
+            <IconButton on:click={() => detachImage(index)}>
+              <CloseIcon color="#89f1ef"/>
+            </IconButton>
+          </div>
         </div>
-      </div>
-    {/each}
+      {/each}
     </div>
     <input
       class="message-input"
